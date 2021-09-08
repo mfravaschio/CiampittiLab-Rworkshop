@@ -1,0 +1,155 @@
+---
+title: 'Day 1: R basics'
+author: "J. Lacasa"
+date: "8/13/2021"
+output:
+  ioslides_presentation:
+    number_sections: no
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+# Motivation:  
+
+
+## Why programming/stats?  
+
+* Reduce human error in repetitive tasks  
+* Reach conclusions  
+* Effective visualizations  
+* Automatize!!  
+
+## Why programming/stats? - Examples  
+
+* Labels  
+* Apply repetitive tasks to large amounts of data  
+
+```{r, echo=F}
+knitr::include_graphics("figs/label.png")
+knitr::include_graphics("figs/spreadsheet2.png")
+```
+
+## R vs. RStudio  
+
+**R** is a programming language that is commonly used in research.   
+**RStudio** is an interface   
+More on R vs RStudio, [here](https://mgimond.github.io/ES218/R_vs_RStudio.html). More about RStudio [here](https://b-rodrigues.github.io/modern_R/getting-to-know-rstudio.html).  
+
+* switch to RStudio  
+* R script versus R markdown  
+* Good names for scripts:  
+  `retrieve_data` = good / `retrieve data` = bad!  
+
+# Basic commands  
+
+## R is a calculator  
+```{r}
+5+5 
+# 5+5 
+```
+
+## Objects  
+```{r }
+v1 <- 5 # create any type of object
+v1 # now print it
+v1 <- "five" # and overwrite it
+# V1 != v1
+```
+
+# Naming objects
+
+## Object classes    
+```{r}
+knitr::include_graphics("figs/data_structures.png")
+```
+
+## How to read a function  
+
+```{r, echo=FALSE, eval=FALSE}
+# help(mean)
+# F 1 
+```
+
+## Packages   
+
+> An R package is a collection of functions, data, and documentation that extends the capabilities of base R.  
+[R4DS](https://r4ds.had.co.nz/introduction.html#r).  
+**TIDYVERSE**
+The packages in the tidyverse share a common philosophy of data and R programming, and are designed to work together naturally.  
+
+[**Why tidyverse?**](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html)  
+
+## The pipe function `%>%`   
+
+Conventional:  
+```{r pipe, echo=T}
+df1 <- read.csv("../data/tillage.csv") # https://doi.org/10.6084/m9.figshare.12155553
+colnames(df1)
+df1 <- rename(df1,
+              author= `ï..Author`,
+              start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`)
+df1 <- mutate(df1, difference = Yield.of.CT-Yield.of.NT)# ... etc
+head(df1)
+```
+
+```{r}
+ 
+  
+```
+
+## The pipe function - cont.    
+
+```{r}
+library(tidyverse)
+df1 <- df1 %>% 
+  rename(author= `ï..Author`,
+         start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`) %>% 
+  mutate(df1, difference = Yield.of.CT-Yield.of.NT)# ... etc
+
+head(df1)
+```
+
+## The tidyverse  
+
+Useful functions:  
+
+* `filter()`: selects ROWS that satisfty a logic test  
+
+* `arrange()`: reorders rows based on certain variables  
+
+* `select()`: selects COLUMNS.  **Specify `dplyr::select()`.  
+
+* `mutate()`: creates a new column. Can overwrite preexisting columns. *keep = T/F  
+
+* `rename()`: renames columns  
+
+* `group_by()`: groups data based on levels of a variable. Subsequent functions will be treated for that group.   
+
+***
+`group_by()`:  
+```{r group by}
+usda <- read.csv("../data/USDAsurvey_00-18.csv")
+usda %>% group_by(Year) %>% mutate(year_avg=mean(Value)) %>% head() # NAs
+```
+
+***  
+
+* `summarise()`:   
+```{r}
+usda %>% group_by(Year) %>% summarise(year_avg=mean(Value))
+```
+
+# Wrap up  
+
+***
+* **Weekly Assignments**     
+  ungraded, send me if you wish to receive feedback.  
+
+* **Individual project**  
+  we will provide data  
+  example
+
+* [Join slack!](https://join.slack.com/t/ksucropsteam/shared_invite/zt-u0voy4wz-oUSwbscklejSTdQmiZFFfQ)  
