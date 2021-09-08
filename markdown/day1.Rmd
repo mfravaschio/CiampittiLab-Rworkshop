@@ -9,6 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
+library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
@@ -27,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 * Labels  
 * Apply repetitive tasks to large amounts of data  
 
-```{r, echo=F}
+```{r motiv1, out.height=350, echo=FALSE}
 knitr::include_graphics("figs/label.png")
 knitr::include_graphics("figs/spreadsheet2.png")
 ```
@@ -35,24 +36,35 @@ knitr::include_graphics("figs/spreadsheet2.png")
 ## R vs. RStudio  
 
 **R** is a programming language that is commonly used in research.   
-**RStudio** is an interface   
+**RStudio** is an IDE (integrated development environment) (~ interface)   
+More on R vs RStudio, [here](https://mgimond.github.io/ES218/R_vs_RStudio.html). More about RStudio [here](https://b-rodrigues.github.io/modern_R/getting-to-know-rstudio.html).  
+
+* switch to RStudio  
+* R script versus R markdown  
+
+## R vs. RStudio  
+
+**R** is a programming language that is commonly used in research.   
+**RStudio** is an IDE (integrated development environment) (~ interface)    
 More on R vs RStudio, [here](https://mgimond.github.io/ES218/R_vs_RStudio.html). More about RStudio [here](https://b-rodrigues.github.io/modern_R/getting-to-know-rstudio.html).  
 
 * switch to RStudio  
 * R script versus R markdown  
 * Good names for scripts:  
   `retrieve_data` = good / `retrieve data` = bad!  
+* Projects  
+
 
 # Basic commands  
 
 ## R is a calculator  
-```{r}
+```{r calculator}
 5+5 
 # 5+5 
 ```
 
 ## Objects  
-```{r }
+```{r objects}
 v1 <- 5 # create any type of object
 v1 # now print it
 v1 <- "five" # and overwrite it
@@ -62,15 +74,15 @@ v1 <- "five" # and overwrite it
 # Naming objects
 
 ## Object classes    
-```{r}
+```{r data_str, out.width=950, echo=FALSE}
 knitr::include_graphics("figs/data_structures.png")
 ```
 
 ## How to read a function  
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 # help(mean)
-# F 1 
+# F1 
 ```
 
 ## Packages   
@@ -82,49 +94,75 @@ The packages in the tidyverse share a common philosophy of data and R programmin
 
 [**Why tidyverse?**](https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html)  
 
-## The pipe function `%>%`   
+## The tidyverse  
 
-Conventional:  
-```{r pipe, echo=T}
-df1 <- read.csv("../data/tillage.csv") # https://doi.org/10.6084/m9.figshare.12155553
-colnames(df1)
-df1 <- rename(df1,
-              author= `ï..Author`,
-              start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`)
-df1 <- mutate(df1, difference = Yield.of.CT-Yield.of.NT)# ... etc
-head(df1)
-```
+Useful functions:  
 
-```{r}
- 
+* `select()`: selects COLUMNS. - from `dplyr`.  
+  Helper functions:  
+  `starts_with("abc")`  
+  `ends_with("xyz")`  
+  `contains("ijk")`  
+  `matches("(.)\\1")`: variables that match a regular expression (repeated characters)  
+  `num_range("x", 1:3)`  
+
+* `filter()`: selects ROWS that satisfty a logic test  
+  Helper function: `between()`  
+  **Boolean operators** (logic)  
+  `>`, `<`, `==`, `!=`  
   
-```
-
-## The pipe function - cont.    
-
-```{r}
-library(tidyverse)
-df1 <- df1 %>% 
-  rename(author= `ï..Author`,
-         start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`) %>% 
-  mutate(df1, difference = Yield.of.CT-Yield.of.NT)# ... etc
-
-head(df1)
-```
+* `arrange()`: reorders rows  
 
 ## The tidyverse  
 
 Useful functions:  
 
-* `filter()`: selects ROWS that satisfty a logic test  
-
-* `arrange()`: reorders rows based on certain variables  
-
-* `select()`: selects COLUMNS.  **Specify `dplyr::select()`.  
-
-* `mutate()`: creates a new column. Can overwrite preexisting columns. *keep = T/F  
+* `mutate()`: creates a new column. `.keep` = T/F  
 
 * `rename()`: renames columns  
+
+
+## The pipe function `%>%`   
+
+Conventional:  
+```{r pipe, echo=TRUE}
+df1 <- read.csv("../data/tillage.csv") # https://doi.org/10.6084/m9.figshare.12155553
+
+colnames(df1) 
+```
+
+***  
+
+```{r pipe2}
+df1 <- rename(df1,
+              author= `ï..Author`,
+              start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`)
+
+df1 <- mutate(df1, difference = Yield.of.CT-Yield.of.NT)# ... etc
+
+df1 <- filter(df1, between(difference, -100, 100))
+
+df1 <- arrange(df1, difference)
+
+head(df1)
+```
+
+## The pipe function - cont.    
+
+```{r df1}
+library(tidyverse)
+# again from scratch. What would happen otherwise?
+df1 <- read.csv("../data/tillage.csv") # https://doi.org/10.6084/m9.figshare.12155553
+
+df1 <- df1 %>%
+  rename(author= `ï..Author`,
+         start = `Initial.year.of.NT.practice...or.first.year.of.experiment.if.missing.`) %>%
+  mutate(df1, difference = Yield.of.CT-Yield.of.NT) #%>% 
+  
+
+head(df1)
+```
+
 
 * `group_by()`: groups data based on levels of a variable. Subsequent functions will be treated for that group.   
 
@@ -132,24 +170,45 @@ Useful functions:
 `group_by()`:  
 ```{r group by}
 usda <- read.csv("../data/USDAsurvey_00-18.csv")
-usda %>% group_by(Year) %>% mutate(year_avg=mean(Value)) %>% head() # NAs
+usda %>% 
+  group_by(Year) %>% 
+  mutate(year_avg=mean(Value)) %>% 
+  dplyr::select(Year, State, County, Value, year_avg) %>% 
+  head() 
 ```
 
 ***  
 
 * `summarise()`:   
-```{r}
-usda %>% group_by(Year) %>% summarise(year_avg=mean(Value))
+```{r summarise}
+usda %>%
+  group_by(Year) %>% 
+  summarise(year_avg=mean(Value)) %>%
+  head()
 ```
+
+## Good coding habits  
+
+* Put all `library()` calls at the top of the script.  
+* Organize your files into `data`, `notebook`/`markdown`, `output`.  
+* Comment your code.  
+* Object names:  
+  Don't start with numbers  
+  Shortest understandable  
+* Each %>% followed by a new line.  
+* Avoid long lines (new line after comma).  
+
+
+* More on tidy style [here](style.tidyverse.org/).  
 
 # Wrap up  
 
 ***
 * **Weekly Assignments**     
-  ungraded, send me if you wish to receive feedback.  
+  Ungraded, send me if you wish to receive feedback.  
 
 * **Individual project**  
-  we will provide data  
-  example
+  We can provide data.  
 
-* [Join slack!](https://join.slack.com/t/ksucropsteam/shared_invite/zt-u0voy4wz-oUSwbscklejSTdQmiZFFfQ)  
+
+* [Join slack!](https://join.slack.com/t/ksucropsteam/shared_invite/zt-vgtjmo8y-gqZfijM_N0URJ4GdZmvUwQ)
