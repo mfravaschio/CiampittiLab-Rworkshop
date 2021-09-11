@@ -1,0 +1,9 @@
+{
+    "path" : "~/workshops/CmpttLab-R-workshop/data",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
