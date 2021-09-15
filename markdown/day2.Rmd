@@ -1,0 +1,258 @@
+---
+title: "Day 2- Data Visualization"
+author: "J. Lacasa"
+date: "8/13/2021"
+output:
+  ioslides_presentation:
+    number_sections: no
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+library(sf)
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, message=F, warning=F)
+```
+
+# Libraries  
+```{r libs expl, eval=FALSE}
+library(sf) # load sf before tidyverse 
+library(tidyverse)
+```
+
+# Review functions  
+
+* `filter()`  
+
+* `select()`  
+
+* `mutate()`  
+
+* `group_by()`  
+
+* `summarise()`  
+
+## Analysis Workflow  
+
+```{r analysis_wf, out.width=950, echo=FALSE}
+knitr::include_graphics("figs/analysis_workflow.png")
+```
+
+## Tidyverse Workflow  
+```{r analysis_tidywf, out.width=950, echo=FALSE}
+knitr::include_graphics("figs/tidyverse_workflow.png")
+```
+[source](https://josiahparry.com/slides/tidymodels/xaringan.html)  
+
+# `ggplot2` motivation  
+* [Hadley Wickham's Book](https://ggplot2-book.org/)  
+
+[Presentation](https://www.cedricscherer.com/slides/2019-08-28-intro-ggplot-statsizw#4)  
+
+## Data viz  
+
+* Understand your data  
+* Communicate your results  
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+
+4. Scales `scale_*()`  
+
+5. Coordinate system `coord_*()`  
+
+6. Facets `facet_*()` arrangement of the data into a grid of plots  
+
+7. Visual themes `theme()` visual defaults  
+
+## ggplot2 structure  
+
+1. Data  
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+```{r gg_cheatsheet, out.width=950, echo=FALSE}
+knitr::include_graphics("figs/cheatsheet_ggplot.png")
+```
+
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+  - color, fill, alpha, size, shape.  
+  - group  
+  
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+
+4. Scales `scale_*()`  
+  position, colors, alpha, size, shape...  
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+
+4. Scales `scale_*()`  
+
+5. Coordinate system `coord_*()`  
+  compare `coord_cartesian()` to `scale_y_continuous()`  
+  
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+
+4. Scales `scale_*()`  
+
+5. Coordinate system `coord_*()`  
+
+6. Facets `facet_*()` arrangement of the data into a grid of plots  
+
+***  
+`facet_*`  
+
+```{r facets, out.width=950, echo=FALSE}
+knitr::include_graphics("figs/position-facets.png")
+```
+
+## ggplot2 structure  
+
+1. Data  
+
+2. Layers `geom_*()` and `stat_*()`  
+
+3. Aesthetics `aes()`  
+
+4. Scales `scale_*()`  
+
+5. Coordinate system `coord_*()`  
+
+6. Facets `facet_*()` arrangement of the data into a grid of plots  
+
+7. Visual themes `theme()` visual defaults  
+
+## Same data, different geoms:  
+
+```{r usda1}
+usda <- read.csv("../data/USDAsurvey_00-18.csv")
+usda %>% 
+  group_by(Year, State, Ag.District) %>% 
+  summarise_at(vars(Value), funs(mean)) %>% 
+  ggplot(aes(Year, Value))+
+  geom_point()+
+  theme_bw()
+```
+
+***  
+```{r usda 2}
+usda %>% 
+  group_by(Year, State, Ag.District) %>% 
+  summarise_at(vars(Value), funs(mean)) %>% 
+  ggplot(aes(Year, Value))+
+  geom_smooth()+
+  theme_bw()
+```
+
+***  
+
+```{r usda3}
+usda %>% 
+  group_by(Year, State, Ag.District) %>% 
+  summarise_at(vars(Value), funs(mean)) %>% 
+  ggplot(aes(Year, Value))+
+  geom_point(aes(color=State))+
+  geom_smooth()+
+  theme_bw()
+```
+
+***  
+
+```{r usda4}
+usda %>% 
+  group_by(Year, State, Ag.District) %>% 
+  summarise_at(vars(Value), funs(mean)) %>% 
+  ggplot(aes(Year, Value))+
+  geom_point(aes(color=State))+
+  geom_smooth(method='lm')+
+  theme_bw()
+```
+
+## Maps  
+
+```{r fao}
+fao <- read.csv("../data/FAOSTAT_data_9-15-2021.csv")
+```
+
+```{r map libs}
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(rgeos)
+```
+
+***  
+
+```{r maps}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+### explain join_*() ###
+
+world %>%
+  left_join(fao %>% rename(sovereignt=Area)) %>% 
+  ggplot(aes(geometry=geometry))+
+  geom_sf(aes(fill=Value))+
+  theme_bw()
+```
+
+
+## Work in pairs  
+**A.** Load the file "lotus.csv" and answer these questions with visualizations.  
+```{r lotus}
+lotus <- read.csv("../data/lotus.csv")
+```
+* Are there any extreme values?  
+* What genotype has the greatest biomass?  
+* What treatment has the greatest biomass?  
+
+**B.** Use the USDA data and visualize a time series of:  
+* Average country yields (i.e. axes: x = year, y = yield) with standard errors.  
+* Average state yields (i.e. axes: x = year, y = yield) with standard errors. Here, plot 2 graphs: one with several lines, and one faceted for each state. Compare what each plot communicates.  
+
+## References  
+
+* [Font selection](https://medium.com/nightingale/choosing-a-font-for-your-data-visualization-2ed37afea637)  
+
+* [Color selection](https://coolors.co/ff7477-eac435-345995-03cea4-721817)  
+
+
