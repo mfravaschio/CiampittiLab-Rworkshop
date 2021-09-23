@@ -40,7 +40,7 @@ knitr::include_graphics("figs/analysis_workflow.png")
 
 ## Tidyverse Workflow  
 ```{r analysis_tidywf, out.width=950, echo=FALSE}
-knitr::include_graphics("figs/tidyverse_workflow.png")
+knitr::include_graphics("../figs/tidyverse_workflow.png")
 ```
 [source](https://josiahparry.com/slides/tidymodels/xaringan.html)  
 
@@ -128,7 +128,7 @@ usda %>%
   ggplot(aes(Year, Value))+
   
   # layers 
-  geom_point(aes(color = County, shape = County), alpha = 0.6,
+  geom_point(aes(color = Value), alpha = 0.6, 
              # everything inside aes() is mapped 
              # and is used to differenciate btw groups
              show.legend = FALSE)+
@@ -142,11 +142,11 @@ usda %>%
 usda %>% 
   ggplot(aes(Year, Value))+
   # layers 
-  geom_point(aes(fill = State),
+  geom_point(aes(color = State),
              shape = 21, alpha = 0.6,
              show.legend = FALSE)+
-  geom_smooth(aes(color = State,
-                  group = State)) #same for geom_line
+  geom_smooth(aes(group = State, 
+                  color = State)) #same for geom_line
 ```
 ## ggplot2 structure  
 
@@ -170,6 +170,8 @@ usda %>%
                   group = State)) + #same for geom_line
   scale_x_continuous(limits = c(1990, 2021))+
   scale_y_continuous(limits = c(0, 300))+
+  scale_color_brewer(palette = "C")+
+  scale_fill_brewer(palette = "C")
   theme_classic()
 ```
 
@@ -184,6 +186,7 @@ usda %>%
 4. Scales `scale_*()`  
 
 5. Coordinate system `coord_*()`  
+
 HOMEWORK:  compare `coord_cartesian()` to `scale_y_continuous()`  
   
 ## ggplot2 structure  
@@ -321,12 +324,28 @@ lotus <- read.csv("../data/lotus.csv")
 ```{r}
 lotus %>% 
   ggplot(aes(rsum, pac))+
-  geom_point()
+  geom_point(aes(shape = trat, color = planta))+
+  labs(x = "biomasa raices",
+       y = "biomasa aerea",
+       color = "Genotipo")+
+  scale_shape_manual(values = c(21, 15))
+
 ```
 
 
 **B.** Use the USDA data and visualize a time series of:  
 * Average country yields (i.e. axes: x = year, y = yield) with standard errors.  
+
+```{r usda}
+```
+
+
+```{r usda}
+usda %>% 
+  group_by(Year) %>% 
+  
+```
+
 * Average state yields (i.e. axes: x = year, y = yield) with standard errors. Here, plot 2 graphs: one with several lines, and one faceted for each state. Compare what each plot communicates.  
 
 ## References  

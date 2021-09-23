@@ -2,19 +2,19 @@
     "collab_server" : "",
     "contents" : "",
     "created" : 1631831398745.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3243376653",
+    "hash" : "0",
     "id" : "DE840DAA",
     "lastKnownWriteTime" : 1631883344,
-    "last_content_update" : 1631883344662,
+    "last_content_update" : 1632268899467,
     "path" : "~/workshops/CmpttLab-R-workshop/markdown/day2.Rmd",
     "project_path" : "markdown/day2.Rmd",
     "properties" : {
-        "cursorPosition" : "317,56",
-        "last_setup_crc32" : "1086F7B962623d3b",
-        "scrollLine" : "312"
+        "cursorPosition" : "345,2",
+        "last_setup_crc32" : "483A213862623d3b",
+        "scrollLine" : "333"
     },
     "read_only" : false,
     "read_only_alternatives" : [
