@@ -1,0 +1,78 @@
+---
+title: "Assignment 3 - Data wrangling"
+author: "R workshop"
+date: "Fall 2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Guidelines  
+Use R markdown to complete your assignment. Please provide all the code to make your work 100% reproducible.  
+
+# 1. Data wrangling  
+
+Read the file "lotus.csv". 
+```{r}
+lotus <- read.csv("../data/lotus.csv")
+head(lotus)
+```
+
+## 1.1.  
+Generate a new dataframe with the following columns: plant (not "planta"), trt, plant_id (factor with levels 1, 2, 3, 4 and 5), tallo_cm, tallo_g.  
+
+## 1.2.  
+Take the dataframe `lotus` again, make 5 relevant questions. Write the questions and design correct visualizations. Remember to name the axes and specify the units properly.  
+
+## 1.3  
+
+# 2. Reshaping  
+
+## 2.1.  
+Take the data frame from USDA and keep only the data from the counties from states where the historical mean yield of corn is 12 tn ha^-1^. Create a dataframe `df_21` that has a column for year and one for each one of the selected states, and the data in each cell is the average corn yield of that year, in tons per hectare. See example:  
+
+```{r example, echo=FALSE}
+# this is a made up example
+set.seed(62)
+data.frame(year=c(2011:2020), 
+           IA = rnorm(10,15,2.5),
+           IN = rnorm(10,14,2.5),
+           KS = rnorm(10,10,5))
+```
+
+# 3. Think  
+You are taking measurements of a 2x3x6 factorial experiment. The variables you are measuring are incident and intercepted radiation (top and bottom of the canopy), leaf area of 5 plants (individually measured), stem diameter and plant height. You go to the field 5 times in the growing cycle. At the end, you also measure kernel number, kernel weight and yield. How would you organize your data?    
+
+# Also, from class:  
+
+Read the file "Data file of Heat tolerance of chickpea genotypes in thermal zone of Ethiopia.xlsx" (also, check the metadata) and then:  
+**a.** Create the columns:
+* "FPI" that is the Flowering-Podding Interval (i.e. the difference (in days) between 50% flowering and 50% podding); "PD", Podding duration, as the difference (in days) between start and end of podding.  
+**b.** Read the file "chickpea_weather_madeup.csv" and pair each treatment with its data and create a new dataframe containing all the information, but only with the treatments that have crop data.  
+**c.** Create a new dataframe that is the "longer" version of that "wide" dataframe.  
+**d.** Visualize Yield versus PD, and visualize the average temperature july-september.  
+
+**Extra and super fun:** Pick 2 treatments of your choice and make a timeline with x = days, y = treatment, and in text show the event happening at which moment. 
+
+## Discuss  
+You are working on a model to predict yield using soil, weather and crop data. You want to try the following variables to your model:  
+* Yield  
+* Density  
+* Genotype  
+* N fertilization  
+* P fertilization  
+* Planting date  
+* Soil water content  
+* Sand %  
+* Clay %  
+* pH  
+
+* Precipitation (induvidual for April, May, June, July, Sept and Oct)  
+* Temperature (induvidual for April, May, June, July, Sept and Oct)  
+
+How would you arrange your data frame?  
+
+[Cheatsheets](https://www.google.com "Google's Homepage")
+
+

@@ -1,0 +1,11 @@
+"0","#pivot_longer
+lotus2 <- lotus %>% 
+  pivot_longer(cols = contains(""tallo""),
+               names_to = ""nr"",
+               values_to = ""tallo"") %>% 
+  drop_na(length_cm)
+"
+"2","Error: Can't subset columns that don't exist.
+[31mx[39m Column `length_cm` doesn't exist.
+[90mRun `rlang::last_error()` to see where the error occurred.[39m
+"
